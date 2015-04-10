@@ -71,6 +71,7 @@ def get_stats(tuple_list, target_offense):
 	return(mean,stdev,values_list)
 
 def predict_occurrences(year_list,counts_per_year, target_year):
+	"""Returns the predicted number of offenses for a given year and the parameters for the linear regression used to fit"""
 	slope, intercept, r_value, p_value, std_err = stats.linregress(year_list, counts_per_year)
 	# y = mx + b
 	predicted = slope * int(target_year) + intercept

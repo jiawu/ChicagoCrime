@@ -1,4 +1,5 @@
 def read_data(filename):
+	"""Returns a list of all the lines in the file, minus the header"""
 	file_object = open(filename, 'r')
 
 	#read the file line-by-line

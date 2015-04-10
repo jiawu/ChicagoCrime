@@ -7,6 +7,7 @@ import numpy as np
 
 
 def plot_bar_graph(target_offenses, means_offenses, stdev_offenses, filename):
+	"""Plots and saves a bar graph"""
 	fig, ax = plt.subplots()
 	bar_width = 0.8
 	index = np.arange(len(target_offenses))
@@ -23,6 +24,7 @@ def plot_bar_graph(target_offenses, means_offenses, stdev_offenses, filename):
 	
 
 def plot_line_graph(target_offenses, counts, year_list, filename):
+	"""Plots and saves a line graph """
 	#this is to demonstrate line graphs but the data is categorical so you should actually be using bar graphs
 	fig, ax = plt.subplots()
 	colors = ["blue","red","orange","green","yellow","purple"]
@@ -37,6 +39,7 @@ def plot_line_graph(target_offenses, counts, year_list, filename):
 
 ### Optional Method for project extension 1 ###
 def plot_correlation_graph(temps, offense_counts,label, filename):
+	"""Plots and saves a scatterplot given a list of temperatures and offense counts"""
 	#this is to demonstrate line graphs but the data is categorical so you should actually be using bar graphs
 	fig, ax = plt.subplots()
 
