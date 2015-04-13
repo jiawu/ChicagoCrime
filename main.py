@@ -116,9 +116,102 @@ for index,offense in enumerate(target_offenses):
 # 1. What's the correlation between temperature and offense occurrences? Is there a particular category of offense where there's a negative correlation between temperature and number of occurrences?
 
 
+# Reading the temperature file:
+weather_file_name = '/Users/jjw036/ChicagoCrime/weather_parsed.csv'
+weather_data = parsing_module.read_data(weather_file_name)
+
+weather_list = []
+
+# We can read the data into a list
+for entry in weather_data:
+
+	entry = entry.split(',') 
+	report = {	"Station": entry[0],
+				"Location": entry[1],
+				"Date": entry[2],
+				"MaxTemp": entry[3],
+				"Year": entry[4],
+				"Month": entry[5]
+			}	
+
+	weather_list.append(report)
+
+# Get the average temperature of each month for a 4 year period
+# Get all the month names in a year.
+month_list = []
+for i in range(1,13):
+	month_list.append(calendar.month_name[i])
+
+average_max_temps = []
+# cycle through months and years
+for year in year_list:
+	for month in month_list:
+		mean_temp, std_temp, temps = weather_module.calculate_temp_summary_by_month(weather_list, month, year)
+		average_max_temps.append(mean_temp)
+
+
+# In our organized case list, we're going to get the number of occurences for each month.
+monthly_offense_list =[]
+total_monthly_offenses = []
+for year in year_list:
+	for month in month_list:
+		monthly_offenses, offense_n = crime_module.get_crime_summary_by_month(organized_cases, month, year)
+		monthly_offense_list.append(monthly_offenses)
+		total_monthly_offenses.append(offense_n)
+
+
+#Plotting the correlation between number of offenses and temperature
+
+plotting_module.plot_correlation_graph(average_max_temps, total_monthly_offenses, "Total Monthly Offenses", "total_temp_correlation.png")
+
+pearson_corr, p_value = stats.pearsonr(average_max_temps,total_monthly_offenses)
+
+#There's a positive correlation between temperature and crime
+
+#Is there an offense where there's a negative correlation?
+
+# Organize the monthly offense list into a list of lists.
+# Initialize dictionary
+monthly_offense_dict = {}
+for offense in offense_list:
+	monthly_offense_dict[offense] = []
+
+for month_summary in monthly_offense_list:
+	for offense_tuple in month_summary:
+		offense = offense_tuple[0]
+		n = offense_tuple[1]
+		monthly_offense_dict[offense].append(n)
+
+tuple_list = []
+for offense in monthly_offense_dict.keys():
+	monthly_offense_occurence = monthly_offense_dict[offense]
+	pearson_corr, p_value = stats.pearsonr(average_max_temps,monthly_offense_occurence)
+	tuple_list.append((offense,pearson_corr))
+
+tuple_list = sorted(tuple_list, key=lambda x: x[1])
+
+# :( 
+
+
 # 2. Where have these offenses occurred? We are going to write a quick extension that maps each offense onto a road map using the location of each case (longitude/latitude).
 #Task: Plot all the locations of MOTOR VEHICLE THEFT in the year 2014
 
+case_list_2014 = crime_module.get_cases_by_year(case_list,2014)
+organized_cases_2014 = crime_module.organize_cases_by_offense(case_list_2014)
+motor_theft_cases_2014 = organized_cases_2014['MOTOR VEHICLE THEFT']
+plotting_module.plot_crime_map(motor_theft_cases_2014,"motor_theft_map_2014.png")
 
 # 3. Advanced data structures and tables. Putting the cases in a table format using a package called Pandas.
 #Task: Create a bargraph showing the number of cases for each category for the year 2014.
+import pandas as pd
+
+crimes_df = pd.read_csv("crimes_2001_to_present_parsed.csv")
+#splitting an object into groups based on the column crime_file_name
+
+crimes_2014 = crimes_df.groupby(['Year']).get_group(2014)
+
+#plot a bar graph for the number of crimes committed in 2014
+crimes_2014.groupby(['Primary Type'])[['Description']].count().plot(kind = 'bar', legend=False)
+plt.xlabel('Offense Primary Type')
+plt.ylabel('Number of offenses')
+plt.show()

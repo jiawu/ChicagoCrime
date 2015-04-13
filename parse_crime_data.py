@@ -15,7 +15,7 @@ Here's the line with indices:
 
 PATTERN = re.compile(r''',(?=(?:[^'"]|'[^']*'|"[^"]*")*$)''')
 
-""""
+
 file_object = open('/Users/jjw036/ChicagoCrime/Crimes_2001_to_present.csv', 'r')
 with open('/Users/jjw036/ChicagoCrime/crimes_2001_to_present_parsed.csv', 'w') as csvfile:
 	writer = csv.writer(csvfile, delimiter=',')
@@ -32,8 +32,6 @@ with open('/Users/jjw036/ChicagoCrime/crimes_2001_to_present_parsed.csv', 'w') a
 			for index,term in enumerate(new_line):
 				if "," in term:
 					new_line[index] = term.replace(',', ' ')
-
-			
 			try:
 				date = new_line[2]
 				#date format is 03/03/2014
@@ -46,10 +44,12 @@ with open('/Users/jjw036/ChicagoCrime/crimes_2001_to_present_parsed.csv', 'w') a
 					writer.writerow([new_line[0], new_line[1],new_line[2], new_line[3], new_line[5], new_line[6], new_line[7], new_line[12], new_line[17], "Month", new_line[19], new_line[20]])
 			except IndexError:
 				print("Found line with incomplete entry.")
+			except ValueError:
+				print("Weird Error.")
 			counter += 1
 			if counter % 100000 == 0:
 				print(counter)
-"""
+
 file_object = open('/Users/jjw036/ChicagoCrime/512021.csv', 'r')
 with open('/Users/jjw036/ChicagoCrime/weather_parsed.csv', 'w') as csvfile:
 	writer = csv.writer(csvfile, delimiter=',')
