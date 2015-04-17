@@ -3,7 +3,6 @@ Simple demo of a bar chart. Adapted from matplotlib example in gallery.
 """
 import matplotlib.pyplot as plt
 import numpy as np
-import matplotlib.pyplot as plt
 
 
 # Example data
