@@ -188,9 +188,13 @@ for offense in monthly_offense_dict.keys():
 	pearson_corr, p_value = stats.pearsonr(average_max_temps,monthly_offense_occurence)
 	tuple_list.append((offense,pearson_corr))
 
-tuple_list = sorted(tuple_list, key=lambda x: x[1])
 
-# :( 
+def my_key(my_tuple): 
+	return my_tuple[1]
+
+tuple_list = sorted(tuple_list, key=my_key)
+
+# :)
 
 
 # 2. Where have these offenses occurred? We are going to write a quick extension that maps each offense onto a road map using the location of each case (longitude/latitude).
