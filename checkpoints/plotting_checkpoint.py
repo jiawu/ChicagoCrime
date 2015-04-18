@@ -119,7 +119,7 @@ def get_stats(dictionary_list, target_offense):
         if offense in offense_list:
             value = offenses[target_offense]
             values.append(value)
-            contributions.append(float(value)/float(total_offenses)*100)
+            contributions.append(float(value)/float(total_offenses))
         else:
             values.append(0.0)
             contributions.append(0.0)
@@ -234,7 +234,7 @@ def plot_line_graph(target_offenses, conts, year_list, filename):
     ax.get_xaxis().get_major_formatter().set_useOffset(False)    
     
     plt.xlabel('Year')
-    plt.ylabel('Percent contribution')
+    plt.ylabel('Contribution')
     plt.legend()
     
     plt.savefig(filename,format="png")
@@ -266,5 +266,5 @@ def predict_occurrences(year_list,cont_per_year, target_year):
 
 for index,offense in enumerate(name_offenses):
     predicted, parameters = predict_occurrences(year_list[:-1],cont_offenses[index][:-1], target_year)
-    print("For the year " + str(target_year) + ", " + offense + " is predicted to contribute " + str(predicted) + " percent.")
+    print("For the year " + str(target_year) + ", " + offense + " is predicted to contribute " + str(predicted*100) + " percent.")
     # y = mx + b
